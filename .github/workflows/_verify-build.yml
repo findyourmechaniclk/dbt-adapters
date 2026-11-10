@@ -91,6 +91,14 @@ jobs:
                   python-version: ${{ inputs.python-version }}
                   allow-prereleases: true
 
+            - name: "Cache pip dependencies"
+              uses: actions/cache@v4
+              with:
+                  path: ~/.cache/pip
+                  key: ${{ runner.os }}-pip-${{ inputs.python-version }}-${{ hashFiles(format('./{0}/pyproject.toml', inputs.package)) }}
+                  restore-keys: |
+                      ${{ runner.os }}-pip-${{ inputs.python-version }}-
+
             - name: "Set environment variables"
               run: |
                   echo "HATCH_PYTHON=${{ inputs.python-version }}" >> $GITHUB_ENV
